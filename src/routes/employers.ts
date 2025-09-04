@@ -5,8 +5,8 @@ import {
   getEmployerById,
   updateEmployer,
   deleteEmployer,
-} from "../controllers/employerController";
-import auth from "../middleware/auth";
+} from "../controllers/employerController.js";
+import auth from "../middleware/auth.js";
 console.log("Employers route loaded");
 
 const router = express.Router();

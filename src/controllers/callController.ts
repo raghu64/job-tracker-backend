@@ -1,5 +1,5 @@
-import { Request, Response } from "express"
-import { getDb } from "../db"
+import type { Request, Response } from "express"
+import { getDb } from "../db.js"
 import { ObjectId } from "mongodb"
 
 const COLLECTION = 'call'

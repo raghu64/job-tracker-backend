@@ -1,11 +1,11 @@
 import express from "express"
 import dotenv from "dotenv"
 import cors from "cors";
-import authRoutes from "./routes/auth"
-import jobRoutes from "./routes/jobs"
-import callRoutes from "./routes/calls"
-import employerRoutes from "./routes/employers"
-import { connectDB } from "./db"
+import authRoutes from "./routes/auth.js"
+import jobRoutes from "./routes/jobs.js"
+import callRoutes from "./routes/calls.js"
+import employerRoutes from "./routes/employers.js"
+import { connectDB } from "./db.js"
 
 dotenv.config();
 

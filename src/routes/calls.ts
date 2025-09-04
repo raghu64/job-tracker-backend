@@ -1,7 +1,7 @@
 import express from "express"
-import auth from "../middleware/auth"
+import auth from "../middleware/auth.js"
 
-import { createCall, getAllCalls, updateCall, deleteCall } from "../controllers/callController"
+import { createCall, getAllCalls, updateCall, deleteCall } from "../controllers/callController.js"
 
 const router = express.Router()
 console.log("Calls route loaded")

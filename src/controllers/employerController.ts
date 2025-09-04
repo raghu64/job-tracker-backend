@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { getDb } from "../db";
+import type { Request, Response } from "express";
+import { getDb } from "../db.js";
 import { ObjectId } from "mongodb";
 
 const COLLECTION = "employer";
@@ -27,7 +27,7 @@ export async function getEmployerById(req: Request, res: Response) {
   const db = getDb();
   const id = req.params.id;
 
-  if (!ObjectId.isValid(id)) {
+  if (!id || !ObjectId.isValid(id)) {
     return res.status(400).json({ message: "Invalid employer ID" });
   }
 
@@ -44,7 +44,7 @@ export async function updateEmployer(req: Request, res: Response) {
   const db = getDb();
   const id = req.params.id;
 
-  if (!ObjectId.isValid(id)) {
+  if (!id || !ObjectId.isValid(id)) {
     return res.status(400).json({ message: "Invalid employer ID" });
   }
 
@@ -66,7 +66,7 @@ export async function deleteEmployer(req: Request, res: Response) {
   const db = getDb();
   const id = req.params.id;
 
-  if (!ObjectId.isValid(id)) {
+  if (!id || !ObjectId.isValid(id)) {
     return res.status(400).json({ message: "Invalid employer ID" });
   }
 

@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import type { Request, Response } from "express"
 import { getDb } from "../db.js"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"

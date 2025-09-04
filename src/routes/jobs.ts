@@ -1,8 +1,8 @@
 import express from "express"
-import auth from "../middleware/auth"
-import role from "../middleware/role"
+import auth from "../middleware/auth.js"
+import role from "../middleware/role.js"
 
-import { createJob, getMyJobs, getAllJobs, updateJob, deleteJob } from "../controllers/jobController"
+import { createJob, getMyJobs, getAllJobs, updateJob, deleteJob } from "../controllers/jobController.js"
 
 const router = express.Router()
 
