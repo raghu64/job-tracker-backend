@@ -6,6 +6,7 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 
 
 const envPath = path.resolve(process.cwd(), `.env.${NODE_ENV}`);
+console.log(`Loading environment variables from ${envPath}`);
 
 if (fs.existsSync(envPath)) {
   dotenv.config({ path: envPath });
