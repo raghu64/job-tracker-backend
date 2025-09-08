@@ -1,5 +1,7 @@
 import { Request } from "express";
 
+declare module 'express'
+
 declare global {
   namespace Express {
     interface Request {
