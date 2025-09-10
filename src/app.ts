@@ -17,7 +17,7 @@ import { connectDB } from "./db.js"
 
 const app = express();
 
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: ["http://localhost:3000", "https://job-tracker-frontend-sage-ten.vercel.app/"] }));
 
 (async () => {
 
