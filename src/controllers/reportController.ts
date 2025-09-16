@@ -45,6 +45,7 @@ const parseDate = (dateString: string): Date => {
 };
 
 const parseDateLuxon = (dateString: string, timeZone: string = defaultTimeZone, daysDiff: number = 0): Date => {
+    console.log(`Parsing date: ${dateString} with timeZone: ${timeZone} and daysDiff: ${daysDiff}`);
     const dt = DateTime.fromISO(dateString, { zone: timeZone }).minus({ days: daysDiff });   
     if (!dt.isValid) {
         throw new Error('Invalid date format. Expected YYYY-MM-DD');
