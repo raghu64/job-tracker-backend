@@ -1,6 +1,9 @@
 import type { Request, Response } from 'express';
 import { ObjectId } from 'mongodb';
 import { getDb } from '../db.js';
+import { DateTime } from 'luxon';
+import { time } from 'console';
+
 
 interface DateRange {
     startDate: Date;
@@ -17,6 +20,8 @@ interface ReportData {
         to: string;
     };
 }
+
+const defaultTimeZone = "America/New_York";
 
 const parseDate = (dateString: string): Date => {
   const [yearStr = '', monthStr = '', dayStr = ''] = dateString.split("-");
@@ -39,38 +44,42 @@ const parseDate = (dateString: string): Date => {
   return date;
 };
 
+const parseDateLuxon = (dateString: string, timeZone: string = defaultTimeZone, daysDiff: number = 0): Date => {
+    const dt = DateTime.fromISO(dateString, { zone: timeZone }).minus({ days: daysDiff });   
+    if (!dt.isValid) {
+        throw new Error('Invalid date format. Expected YYYY-MM-DD');
+    }   
+    return dt.toJSDate();
+}
+
 
 // Helper function to get date range based on duration
 const getDateRange = (
     duration: string,
     customFrom: string | null = null,
-    customTo: string | null = null
+    customTo: string | null = null,
+    timeZone: string = defaultTimeZone
 ): DateRange => {
     const now = new Date();
     let startDate: Date, endDate: Date;
 
     switch (duration) {
         case 'today':
-            startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            startDate = parseDateLuxon(DateTime.now().toISODate(), timeZone);
+            endDate = parseDateLuxon(DateTime.now().toISODate(), timeZone);
             break;
 
         case 'week':
-            const startOfWeek = new Date(now);
-            startOfWeek.setDate(now.getDate() - 6);
-            startOfWeek.setHours(0, 0, 0, 0);
-
-            const endOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+            const startOfWeek = parseDateLuxon(DateTime.now().toISODate(), timeZone, 6);
+            const endOfWeek = parseDateLuxon(DateTime.now().toISODate(), timeZone);
 
             startDate = startOfWeek;
             endDate = endOfWeek;
             break;
 
         case 'month':
-            const startofMonth = new Date(now);
-            startofMonth.setDate(now.getDate() - 29);
-            startDate = startofMonth;
-            endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
+            startDate = parseDateLuxon(DateTime.now().toISODate(), timeZone, 29);
+            endDate = parseDateLuxon(DateTime.now().toISODate(), timeZone);
             break;
 
         case 'custom':
@@ -78,8 +87,8 @@ const getDateRange = (
                 throw new Error('Custom date range requires both from and to dates');
             }
             
-            startDate = parseDate(customFrom);
-            endDate = parseDate(customTo);
+            startDate = parseDateLuxon(customFrom, timeZone);
+            endDate = parseDateLuxon(customTo, timeZone);
             // endDate.setHours(23, 59, 59, 999);
             break;
 
@@ -93,7 +102,7 @@ const getDateRange = (
 export async function getReport(req: Request, res: Response) {
     console.log('Generating report...', req.query);
     try {
-        const { duration, fromDate, toDate } = req.query;
+        const { duration, fromDate, toDate, timeZone } = req.query;
         const userId = new ObjectId(req.user!.id);
 
         if (!duration) {
@@ -109,7 +118,8 @@ export async function getReport(req: Request, res: Response) {
         const { startDate, endDate } = getDateRange(
             duration as string,
             fromDate as string || null,
-            toDate as string || null
+            toDate as string || null,
+            timeZone as string || defaultTimeZone
         );
 
         // Build query filters for calls
