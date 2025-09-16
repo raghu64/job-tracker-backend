@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.js"
 import jobRoutes from "./routes/jobs.js"
 import callRoutes from "./routes/calls.js"
 import employerRoutes from "./routes/employers.js"
+import reportsRoutes from './routes/reports.js';
 import { connectDB } from "./db.js"
 
 // dotenv.config();
@@ -29,6 +30,7 @@ app.use(cors({ origin: ["http://localhost:3000", "https://job-tracker-frontend-s
     app.use("/api/v1/jobs", jobRoutes)
     app.use("/api/v1/calls", callRoutes)
     app.use("/api/v1/employers", employerRoutes)
+    app.use("/api/v1/reports", reportsRoutes)
 
 
     const PORT = config.port || 4000;
