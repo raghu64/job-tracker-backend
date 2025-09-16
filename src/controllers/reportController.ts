@@ -103,6 +103,7 @@ export async function getReport(req: Request, res: Response) {
     console.log('Generating report...', req.query);
     try {
         const { duration, fromDate, toDate, timeZone } = req.query;
+        console.log('Report parameters:', { duration, fromDate, toDate, timeZone });
         const userId = new ObjectId(req.user!.id);
 
         if (!duration) {
@@ -121,6 +122,8 @@ export async function getReport(req: Request, res: Response) {
             toDate as string || null,
             timeZone as string || defaultTimeZone
         );
+
+        console.log('Computed date range:', startDate, endDate);
 
         // Build query filters for calls
         const startDateStr = startDate.toISOString().split('T')[0];
