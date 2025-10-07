@@ -11,7 +11,8 @@ export async function createJob(req: Request, res: Response) {
     const job = {
         ...req.body,
         consultant: new ObjectId(req.user!.id),
-        createdAt: new Date()
+        createdAt: new Date(),
+        updatedAt: new Date()
     }
 
     const result = await db.collection(COLLECTION).insertOne(job)
@@ -62,7 +63,7 @@ export async function updateJob(req: Request, res: Response) {
 
     await db.collection(COLLECTION).updateOne(
         {_id: new ObjectId(id)},
-        {$set: {...req.body, consultant: new ObjectId(req.user!.id)}}
+        {$set: {...req.body, updatedAt: new Date(), consultant: new ObjectId(req.user!.id)}}
     )
 
     const updated = await db.collection(COLLECTION).findOne({"_id": new ObjectId(id)})

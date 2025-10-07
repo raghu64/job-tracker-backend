@@ -9,7 +9,8 @@ export async function createCall(req: Request, res: Response) {
 
     const call = {
         ...req.body,
-        createdAt: new Date()
+        createdAt: new Date(),
+        updatedAt: new Date()
     }
 
     const result = await db.collection(COLLECTION).insertOne(call)
