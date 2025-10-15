@@ -39,10 +39,10 @@ const auth = getAuthorizedClient();
 const people = google.people({ version: 'v1', auth });
 
 
-async function searchContact(email: string) {
+async function searchContact(searchString: string) {
   try{
     const searchResponse = await people.people.searchContacts({
-      query: email,
+      query: searchString,
       readMask: 'names,emailAddresses,phoneNumbers,memberships,biographies',
       pageSize: 1,
     });
@@ -75,7 +75,7 @@ export async function upsertContact(firstName: string, lastName: string, email: 
   try {
     const newContactData: newContact = { firstName, lastName, email, phone, notes };
     console.log(newContactData)
-    const existingContact: existingContact | undefined = await searchContact(email);
+    const existingContact: existingContact | undefined = await searchContact(email ? email : phone);
     if (existingContact) {
       console.log('Contact already exists. Updating contact...');
       const updatedData =  prepareContactToUpdate(existingContact, newContactData);
