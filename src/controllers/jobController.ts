@@ -81,3 +81,15 @@ export async function deleteJob(req: Request, res: Response) {
 
     res.sendStatus(204)
 }
+
+export async function getJobById(id: string) {
+    const db = getDb()
+    const job = await db.collection(COLLECTION)
+                            .find({_id: new ObjectId(id)})
+                            .toArray()
+    if(Array.isArray(job) && job.length === 0) {
+        throw new Error("Job not found")
+    } else {
+        return job[0]
+    }
+}
