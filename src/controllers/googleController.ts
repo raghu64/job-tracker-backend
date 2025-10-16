@@ -112,7 +112,7 @@ const prepareContactToUpdate = (existingContact: existingContact, newContact: ne
   }
 
   if (existingContact.notes && newContact.notes && !existingContact.notes.includes(newContact.notes)) {
-    notes += "\n" + newContact.notes
+    notes = newContact.notes + "\n" + notes
   }
 
   return {
