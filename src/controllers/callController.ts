@@ -59,8 +59,19 @@ export async function createCall(req: Request, res: Response) {
     const result = await db.collection(COLLECTION).insertOne(call)
     console.log(`created call: ${result}`)
     
-    let contact: Contact = await prepareContact(call)
-    await upsertContact(contact.firstName, contact.lastName, contact.email, contact.phone, contact.notes )
+    try{
+        let contact: Contact = await prepareContact(call)
+        await upsertContact(contact.firstName, contact.lastName, contact.email, contact.phone, contact.notes )
+    } catch (error: any) {
+        console.error("Error adding contact:", error);
+        return res.status(500).json({
+            error: "Failed to upsert contact",
+            message: `Inserted Call. Failed to create contact: ${(error && error.message) ? error.message : String(error)}`
+        });
+    }
+
+    
+    
     res.json({...call, _id: result.insertedId})
 }
 
@@ -90,8 +101,16 @@ export async function updateCall(req: Request, res: Response) {
     // console.log("updated call")
     const updated = await db.collection(COLLECTION).findOne({"_id": new ObjectId(id)})
     console.log(`updated call: ${updated}`)
-    let contact: Contact = await prepareContact(call)
-    await upsertContact(contact.firstName, contact.lastName, contact.email, contact.phone, contact.notes )
+    try{
+        let contact: Contact = await prepareContact(call)
+        await upsertContact(contact.firstName, contact.lastName, contact.email, contact.phone, contact.notes )
+    } catch (error: any) {
+        console.error("Error updating contact:", error);
+        return res.status(500).json({
+            error: "Failed to update contact",
+            message: `Updated Call. Failed to update contact: ${(error && error.message) ? error.message : String(error)}`
+        });
+    }
     res.json(updated)
 }
 
